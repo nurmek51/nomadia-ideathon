@@ -24,6 +24,9 @@ class EmergencyRequestResponse(EmergencyRequestCreate):
     status: str
     priority_score: int | None = None
     priority_level: str | None = None
+    ai_summary: str | None = None
+    reasons: list[str] = []
+    recommended_action: str | None = None
 
 
 class PrioritizeResponse(BaseModel):

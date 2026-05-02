@@ -52,6 +52,68 @@ class _DispatcherRequestDetailScreenState
     }
   }
 
+  Future<void> _continueFlow(Map<String, dynamic> request) async {
+    final status = normalizeStatusCode(request['status'] as String);
+    setState(() => _loading = true);
+    try {
+      switch (status) {
+        case 'created':
+        case 'verified':
+          await _prioritize();
+          return;
+        case 'prioritized':
+          if (!mounted) {
+            return;
+          }
+          context.push(
+            '/dispatcher/priority/${widget.requestId}',
+            extra: {
+              'request_id': widget.requestId,
+              'priority_score': request['priority_score'],
+              'priority_level': request['priority_level'],
+              'ai_summary': request['ai_summary'] ??
+                  'Приоритизация рассчитана и сохранена для этой заявки.',
+              'reasons': (request['reasons'] as List<dynamic>?) ?? const [],
+              'recommended_action': request['recommended_action'],
+            },
+          );
+          return;
+        case 'matched':
+        case 'supplier_confirmed':
+          final match = await ApiService.instance.getRequestMatch(widget.requestId);
+          if (!mounted) {
+            return;
+          }
+          context.push('/dispatcher/match/${widget.requestId}', extra: match);
+          return;
+        case 'in_delivery':
+        case 'delivered':
+          final delivery = await ApiService.instance.getRequestDelivery(widget.requestId);
+          if (!mounted) {
+            return;
+          }
+          context.push(
+            '/dispatcher/delivery/${widget.requestId}/${delivery['delivery_id']}',
+            extra: delivery,
+          );
+          return;
+        default:
+          await _prioritize();
+      }
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('$error')),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _loading = false);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,6 +135,7 @@ class _DispatcherRequestDetailScreenState
             return Center(child: Text('${snapshot.error}'));
           }
           final request = snapshot.data!;
+          final status = normalizeStatusCode(request['status'] as String);
           return ListView(
             padding: const EdgeInsets.all(20),
             children: [
@@ -102,8 +165,10 @@ class _DispatcherRequestDetailScreenState
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: _loading ? null : _prioritize,
-                child: Text(_loading ? 'Расчёт...' : 'Рассчитать AI-приоритет'),
+                onPressed: _loading ? null : () => _continueFlow(request),
+                child: Text(
+                  _loading ? 'Загрузка...' : _primaryActionLabel(status),
+                ),
               ),
               const SizedBox(height: 24),
             ],
@@ -112,4 +177,16 @@ class _DispatcherRequestDetailScreenState
       ),
     );
   }
+}
+
+String _primaryActionLabel(String status) {
+  return switch (status) {
+    'created' || 'verified' => 'Рассчитать AI-приоритет',
+    'prioritized' => 'Открыть AI-приоритизацию',
+    'matched' => 'Продолжить matching',
+    'supplier_confirmed' => 'Продолжить к доставке',
+    'in_delivery' => 'Открыть доставку',
+    'delivered' => 'Открыть завершённую доставку',
+    _ => 'Продолжить сценарий',
+  };
 }

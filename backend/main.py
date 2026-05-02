@@ -224,6 +224,24 @@ def get_request(request_id: int) -> dict:
     return get_request_or_404(request_id)
 
 
+@app.get("/requests/{request_id}/match", response_model=MatchResponse)
+def get_request_match(request_id: int) -> dict:
+    get_request_or_404(request_id)
+    match_data = db.get_match(request_id)
+    if match_data is None:
+        raise HTTPException(status_code=404, detail="Match not found")
+    return match_data
+
+
+@app.get("/requests/{request_id}/delivery", response_model=DeliveryApproveResponse)
+def get_request_delivery(request_id: int) -> dict:
+    get_request_or_404(request_id)
+    delivery = get_delivery_by_request_id(request_id)
+    if delivery is None:
+        raise HTTPException(status_code=404, detail="Delivery not found")
+    return delivery
+
+
 @app.get("/requests/{request_id}/status-view", response_model=RequestStatusViewResponse)
 def get_request_status_view(request_id: int) -> dict:
     request_data = get_request_or_404(request_id)
@@ -263,6 +281,9 @@ def prioritize_request(request_id: int) -> dict:
     priority_data = calculate_priority(request_data, db)
     request_data["priority_score"] = priority_data["priority_score"]
     request_data["priority_level"] = priority_data["priority_level"]
+    request_data["ai_summary"] = priority_data["ai_summary"]
+    request_data["reasons"] = priority_data["reasons"]
+    request_data["recommended_action"] = priority_data["recommended_action"]
     request_data["status"] = "prioritized"
     return priority_data
 

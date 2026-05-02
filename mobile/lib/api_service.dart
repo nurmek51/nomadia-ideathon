@@ -49,6 +49,10 @@ class ApiService {
       _getMap('/requests/$requestId');
   Future<Map<String, dynamic>> getRequestStatusView(int requestId) =>
       _getMap('/requests/$requestId/status-view');
+  Future<Map<String, dynamic>> getRequestMatch(int requestId) =>
+      _getMap('/requests/$requestId/match');
+  Future<Map<String, dynamic>> getRequestDelivery(int requestId) =>
+      _getMap('/requests/$requestId/delivery');
 
   Future<List<dynamic>> listRequests({
     String? role,
