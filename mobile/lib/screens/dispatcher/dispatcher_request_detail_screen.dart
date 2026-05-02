@@ -79,12 +79,38 @@ class _DispatcherRequestDetailScreenState
           );
           return;
         case 'matched':
+          try {
+            final match = await ApiService.instance.getRequestMatch(widget.requestId);
+            if (!mounted) {
+              return;
+            }
+            context.push('/dispatcher/match/${widget.requestId}', extra: match);
+            return;
+          } catch (_) {
+            final rematched = await ApiService.instance.matchRequest(widget.requestId);
+            if (!mounted) {
+              return;
+            }
+            context.push('/dispatcher/match/${widget.requestId}', extra: rematched);
+            return;
+          }
         case 'supplier_confirmed':
-          final match = await ApiService.instance.getRequestMatch(widget.requestId);
+          try {
+            final match = await ApiService.instance.getRequestMatch(widget.requestId);
+            if (!mounted) {
+              return;
+            }
+            context.push('/dispatcher/match/${widget.requestId}', extra: match);
+            return;
+          } catch (_) {}
+          final delivery = await ApiService.instance.approveDelivery(widget.requestId);
           if (!mounted) {
             return;
           }
-          context.push('/dispatcher/match/${widget.requestId}', extra: match);
+          context.push(
+            '/dispatcher/delivery/${widget.requestId}/${delivery['delivery_id']}',
+            extra: delivery,
+          );
           return;
         case 'in_delivery':
         case 'delivered':

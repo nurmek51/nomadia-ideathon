@@ -25,7 +25,7 @@ class ApiService {
 
   final Dio _dio;
   static const _cloudflareBaseUrl =
-      'https://bosnia-reuters-fridge-rica.trycloudflare.com';
+      'https://themes-adam-thinks-neighbor.trycloudflare.com';
 
   static String _resolveBaseUrl() {
     if (kIsWeb) {
