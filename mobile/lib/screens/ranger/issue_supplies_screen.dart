@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../api_service.dart';
 import '../../widgets/nomadia_navigation.dart';
@@ -42,7 +43,7 @@ class _IssueSuppliesScreenState extends State<IssueSuppliesScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(result['message'] as String)),
       );
-      Navigator.of(context).pop();
+      context.go('/ranger');
     } catch (error) {
       if (!mounted) {
         return;
@@ -64,6 +65,9 @@ class _IssueSuppliesScreenState extends State<IssueSuppliesScreen> {
         context,
         title: 'Выдать ресурс',
         fallbackRoute: '/ranger/lifepod',
+      ),
+      bottomNavigationBar: const NomadiaBottomArea(
+        current: DemoRoleTab.ranger,
       ),
       body: ListView(
         padding: const EdgeInsets.all(20),
@@ -104,6 +108,7 @@ class _IssueSuppliesScreenState extends State<IssueSuppliesScreen> {
             onPressed: _submitting ? null : _submit,
             child: Text(_submitting ? 'Отправка...' : 'Подтвердить выдачу'),
           ),
+          const SizedBox(height: 24),
         ],
       ),
     );

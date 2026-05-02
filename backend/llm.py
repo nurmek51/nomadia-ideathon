@@ -8,6 +8,13 @@ from pydantic import BaseModel
 DEFAULT_GEMINI_MODEL = "gemini-2.5-flash"
 DEFAULT_GEMINI_TIMEOUT_MS = 8000
 
+PRIORITY_LABELS_RU = {
+    "critical": "критическая",
+    "high": "высокая",
+    "medium": "средняя",
+    "low": "низкая",
+}
+
 
 class PriorityNarrative(BaseModel):
     summary: str
@@ -32,11 +39,11 @@ def build_fallback_narrative(
         )
     else:
         summary = (
-            f"Заявка {priority_level}: нужен {request_data['item']}, срочность {request_data['urgency']}, "
+            f"Заявка {PRIORITY_LABELS_RU.get(priority_level, priority_level)}: нужен {request_data['item']}, срочность {request_data['urgency']}, "
             f"локальный контекст учтён в приоритизации."
         )
 
-    recommended_action = "Drone Medical Line" if score >= 80 else "Ground Support Line"
+    recommended_action = "Медицинская доставка дроном" if score >= 80 else "Наземная доставка"
     return PriorityNarrative(
         summary=summary,
         reasons=reasons,
@@ -46,7 +53,10 @@ def build_fallback_narrative(
 
 @lru_cache(maxsize=1)
 def get_gemini_client():
-    if os.getenv("Nomadia_DISABLE_LLM", "").lower() in {"1", "true", "yes"}:
+    if (
+        os.getenv("Nomadia_DISABLE_LLM", "").lower() in {"1", "true", "yes"}
+        or os.getenv("LIFEMESH_DISABLE_LLM", "").lower() in {"1", "true", "yes"}
+    ):
         return None
 
     api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
@@ -88,7 +98,7 @@ def generate_priority_narrative(
             "Return a concise Russian JSON object with:\n"
             "- summary: 1 sentence for operators\n"
             "- reasons: 3 to 5 short bullet-style strings in Russian\n"
-            "- recommended_action: short operational label in English\n\n"
+            "- recommended_action: short operational label in Russian\n\n"
             f"Request:\n{json.dumps(request_data, ensure_ascii=False)}\n"
             f"Priority level: {priority_level}\n"
             f"Priority score: {score}\n"

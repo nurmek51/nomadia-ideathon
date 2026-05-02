@@ -16,6 +16,9 @@ class LifePodInventoryScreen extends StatelessWidget {
         title: 'LifePod — Горное село',
         fallbackRoute: '/ranger',
       ),
+      bottomNavigationBar: const NomadiaBottomArea(
+        current: DemoRoleTab.ranger,
+      ),
       body: FutureBuilder<Map<String, dynamic>>(
         future: ApiService.instance.getInventory(),
         builder: (context, snapshot) {
@@ -78,6 +81,7 @@ class LifePodInventoryScreen extends StatelessWidget {
                 },
                 child: const Text('Запросить пополнение'),
               ),
+              const SizedBox(height: 24),
             ],
           );
         },

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../api_service.dart';
+import '../../utils/labels.dart';
 import '../../widgets/nomadia_navigation.dart';
 
 class SupplierRequestDetailScreen extends StatefulWidget {
@@ -52,7 +54,7 @@ class _SupplierRequestDetailScreenState extends State<SupplierRequestDetailScree
           content: Text('Аптека подтвердила наличие. Доставка может быть запущена.'),
         ),
       );
-      Navigator.of(context).pop();
+      context.go('/supplier');
     } catch (error) {
       if (!mounted) {
         return;
@@ -74,6 +76,9 @@ class _SupplierRequestDetailScreenState extends State<SupplierRequestDetailScree
         context,
         title: 'Emergency-заявка',
         fallbackRoute: '/supplier',
+      ),
+      bottomNavigationBar: const NomadiaBottomArea(
+        current: DemoRoleTab.supplier,
       ),
       body: FutureBuilder<Map<String, dynamic>>(
         future: _future,
@@ -102,7 +107,9 @@ class _SupplierRequestDetailScreenState extends State<SupplierRequestDetailScree
                       const SizedBox(height: 10),
                       Text('Куда: ${request['village']}'),
                       const SizedBox(height: 8),
-                      Text('Приоритет: ${status['priority_level'] ?? 'ожидается'}'),
+                      Text(
+                        'Приоритет: ${status['priority_level'] == null ? 'ожидается' : priorityLevelLabel(status['priority_level'] as String)}',
+                      ),
                       const SizedBox(height: 8),
                       Text('Доставка: ${_deliveryLabel(status['delivery_type'] as String?)}'),
                       const SizedBox(height: 8),
@@ -116,6 +123,7 @@ class _SupplierRequestDetailScreenState extends State<SupplierRequestDetailScree
                 onPressed: _submitting ? null : _accept,
                 child: Text(_submitting ? 'Подтверждение...' : 'Принять и подготовить'),
               ),
+              const SizedBox(height: 24),
             ],
           );
         },
@@ -125,10 +133,5 @@ class _SupplierRequestDetailScreenState extends State<SupplierRequestDetailScree
 }
 
 String _deliveryLabel(String? deliveryType) {
-  return switch (deliveryType) {
-    'drone' => 'Drone Medical Line',
-    'vehicle' => 'Ground Support Line',
-    'ranger_pickup' => 'Выдача рейнджером',
-    _ => 'External Supply',
-  };
+  return deliveryTypeLabel(deliveryType);
 }

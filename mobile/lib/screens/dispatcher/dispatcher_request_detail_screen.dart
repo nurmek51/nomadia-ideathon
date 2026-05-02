@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../api_service.dart';
+import '../../utils/labels.dart';
 import '../../widgets/nomadia_navigation.dart';
 import '../../widgets/status_chip.dart';
 
@@ -59,6 +60,9 @@ class _DispatcherRequestDetailScreenState
         title: 'Детали заявки',
         fallbackRoute: '/dispatcher',
       ),
+      bottomNavigationBar: const NomadiaBottomArea(
+        current: DemoRoleTab.dispatcher,
+      ),
       body: FutureBuilder<Map<String, dynamic>>(
         future: _future,
         builder: (context, snapshot) {
@@ -85,9 +89,11 @@ class _DispatcherRequestDetailScreenState
                       const SizedBox(height: 12),
                       Text('Село: ${request['village']}'),
                       const SizedBox(height: 8),
-                      Text('Срочность: ${request['urgency']}'),
+                      Text('Срочность: ${urgencyLabel(request['urgency'] as String)}'),
                       const SizedBox(height: 8),
-                      Text('Группа: ${request['vulnerable_group']}'),
+                      Text(
+                        'Группа: ${vulnerableGroupLabel(request['vulnerable_group'] as String)}',
+                      ),
                       const SizedBox(height: 8),
                       StatusChip(label: request['status'] as String),
                     ],
@@ -99,6 +105,7 @@ class _DispatcherRequestDetailScreenState
                 onPressed: _loading ? null : _prioritize,
                 child: Text(_loading ? 'Расчёт...' : 'Рассчитать AI-приоритет'),
               ),
+              const SizedBox(height: 24),
             ],
           );
         },

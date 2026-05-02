@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../api_service.dart';
+import '../../utils/labels.dart';
 import '../../widgets/mock_map_card.dart';
 import '../../widgets/nomadia_navigation.dart';
 
@@ -76,7 +78,8 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
           }
 
           final status = snapshot.data!;
-          final isDelivered = _completed || status['status'] == 'delivered';
+          final isDelivered =
+              _completed || normalizeStatusCode(status['status'] as String) == 'delivered';
 
           return ListView(
             padding: const EdgeInsets.all(20),
@@ -132,13 +135,17 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
           );
         },
       ),
-      bottomNavigationBar: SafeArea(
-        minimum: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-        child: ElevatedButton(
-          onPressed: (_completing || _completed) ? null : _complete,
+      bottomNavigationBar: NomadiaBottomArea(
+        current: DemoRoleTab.dispatcher,
+        topChild: ElevatedButton(
+          onPressed: _completing
+              ? null
+              : _completed
+                  ? () => context.go('/dispatcher')
+                  : _complete,
           child: Text(
             _completed
-                ? 'Доставка завершена'
+                ? 'На главный экран'
                 : _completing
                     ? 'Подтверждение...'
                     : 'Отметить как доставлено',
@@ -150,10 +157,5 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
 }
 
 String _deliveryLine(String? type) {
-  return switch (type) {
-    'drone' => 'Drone Medical Line',
-    'vehicle' => 'Ground Support Line',
-    'ranger_pickup' => 'Ranger Pickup',
-    _ => 'External Supply',
-  };
+  return deliveryTypeLabel(type);
 }

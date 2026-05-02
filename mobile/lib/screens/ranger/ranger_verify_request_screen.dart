@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../api_service.dart';
 import '../../widgets/nomadia_navigation.dart';
@@ -36,7 +37,7 @@ class _RangerVerifyRequestScreenState extends State<RangerVerifyRequestScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Заявка подтверждена рейнджером')),
       );
-      Navigator.of(context).pop();
+      context.go('/ranger');
     } catch (error) {
       if (!mounted) {
         return;
@@ -58,6 +59,9 @@ class _RangerVerifyRequestScreenState extends State<RangerVerifyRequestScreen> {
         context,
         title: 'Проверка заявки',
         fallbackRoute: '/ranger',
+      ),
+      bottomNavigationBar: const NomadiaBottomArea(
+        current: DemoRoleTab.ranger,
       ),
       body: FutureBuilder<Map<String, dynamic>>(
         future: _future,
@@ -114,9 +118,10 @@ class _RangerVerifyRequestScreenState extends State<RangerVerifyRequestScreen> {
               ),
               const SizedBox(height: 10),
               OutlinedButton(
-                onPressed: () => Navigator.of(context).pop(),
+                onPressed: () => context.go('/ranger'),
                 child: const Text('Отклонить'),
               ),
+              const SizedBox(height: 24),
             ],
           );
         },

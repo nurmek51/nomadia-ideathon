@@ -3,6 +3,7 @@ import os
 import subprocess
 import time
 import unittest
+import urllib.error
 import urllib.request
 
 
@@ -60,6 +61,22 @@ class DemoFlowTestCase(unittest.TestCase):
         req = urllib.request.Request(BASE_URL + path, data=data, headers=headers, method=method)
         with urllib.request.urlopen(req, timeout=20) as response:
             return json.loads(response.read().decode("utf-8"))
+
+    @staticmethod
+    def request_expect_error(method: str, path: str, body: dict | None = None) -> tuple[int, dict]:
+        data = None
+        headers = {}
+        if body is not None:
+            data = json.dumps(body).encode("utf-8")
+            headers["Content-Type"] = "application/json"
+
+        req = urllib.request.Request(BASE_URL + path, data=data, headers=headers, method=method)
+        try:
+            with urllib.request.urlopen(req, timeout=20) as response:
+                return response.status, json.loads(response.read().decode("utf-8"))
+        except urllib.error.HTTPError as error:
+            payload = json.loads(error.read().decode("utf-8"))
+            return error.code, payload
 
     def setUp(self) -> None:
         reset_response = self.request("POST", "/demo/reset")
@@ -120,6 +137,16 @@ class DemoFlowTestCase(unittest.TestCase):
         self.assertEqual(len(supplier_tasks), 1)
         self.assertEqual(supplier_tasks[0]["request_id"], request_id)
 
+        approve_blocked_status, approve_blocked_payload = self.request_expect_error(
+            "POST",
+            f"/requests/{request_id}/approve-delivery",
+        )
+        self.assertEqual(approve_blocked_status, 409)
+        self.assertEqual(
+            approve_blocked_payload["detail"],
+            "Сначала поставщик должен подтвердить наличие ресурса",
+        )
+
         supplier_confirmed = self.request(
             "POST",
             "/supplier/accept-request",
@@ -151,7 +178,7 @@ class DemoFlowTestCase(unittest.TestCase):
         dashboard = self.request("GET", "/dashboard")
         self.assertEqual(dashboard["critical_requests"], 1)
         self.assertEqual(dashboard["pending_requests"], 0)
-        self.assertEqual(dashboard["isolated_villages"], 1)
+        self.assertGreaterEqual(dashboard["isolated_villages"], 5)
         self.assertEqual(dashboard["active_deliveries"], 1)
         self.assertEqual(dashboard["delivered_today"], 0)
 

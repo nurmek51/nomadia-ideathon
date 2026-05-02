@@ -9,6 +9,9 @@ ITEM_LABELS = {
     "antibiotics": "антибиотики",
     "baby_food": "детское питание",
     "paracetamol": "парацетамол",
+    "fuel_cans": "канистры топлива",
+    "medical_kits": "медицинские наборы",
+    "solar_lanterns": "солнечные фонари",
 }
 
 

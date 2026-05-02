@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../api_service.dart';
+import '../../utils/labels.dart';
 import '../../widgets/emergency_card.dart';
 import '../../widgets/metric_card.dart';
 import '../../widgets/nomadia_navigation.dart';
@@ -85,7 +86,7 @@ class _DispatcherDashboardScreenState extends State<DispatcherDashboardScreen> {
           Map<String, dynamic>? active;
           for (final raw in requests) {
             final request = Map<String, dynamic>.from(raw as Map);
-            if (request['status'] != 'delivered') {
+            if (normalizeStatusCode(request['status'] as String) != 'delivered') {
               active = request;
               break;
             }
@@ -138,7 +139,7 @@ class _DispatcherDashboardScreenState extends State<DispatcherDashboardScreen> {
                     subtitle: 'Срочная заявка',
                     details: [
                       'Село: ${active['village']}',
-                      'Статус: ${active['status']}',
+                      'Статус: ${statusLabel(active['status'] as String)}',
                     ],
                     status: '${active['status']}',
                     actionLabel: 'Открыть заявку',

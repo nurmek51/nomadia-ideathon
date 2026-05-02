@@ -213,6 +213,9 @@ String _itemLabel(String item) {
     'water_kits' => 'Наборы воды',
     'antibiotics' => 'Антибиотики',
     'baby_food' => 'Детское питание',
+    'fuel_cans' => 'Канистры топлива',
+    'medical_kits' => 'Медицинские наборы',
+    'solar_lanterns' => 'Солнечные фонари',
     _ => item,
   };
 }
