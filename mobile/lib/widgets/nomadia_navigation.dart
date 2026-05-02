@@ -21,7 +21,8 @@ AppBar buildNomadiaAppBar(
   required String title,
   String? fallbackRoute,
 }) {
-  final canPop = Navigator.of(context).canPop() || GoRouter.of(context).canPop();
+  final canPop =
+      Navigator.of(context).canPop() || GoRouter.of(context).canPop();
   final showBack = canPop || fallbackRoute != null;
 
   return AppBar(
@@ -117,7 +118,7 @@ class NomadiaBottomArea extends StatelessWidget {
         children: [
           if (topChild != null)
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
               child: topChild!,
             ),
           RoleBottomNavBar(current: current),

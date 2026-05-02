@@ -45,7 +45,7 @@ class EmergencyCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 5),
               ...details.map(
                 (detail) => Padding(
                   padding: const EdgeInsets.only(bottom: 4),
