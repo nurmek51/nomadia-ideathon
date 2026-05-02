@@ -12,9 +12,9 @@ export default function Navbar() {
         <a href="#problem" className="hover:text-primary transition-colors">Thesis</a>
         <a href="#flow" className="hover:text-primary transition-colors">Logistics</a>
       </div>
-      <button onClick={() => window.location.href='/app'} className="bg-neutral text-surface px-8 py-3 font-mono font-bold tracking-widest uppercase hover:bg-primary transition-colors text-sm border-2 border-neutral">
+      {/* <button onClick={() => window.location.href='/app'} className="bg-neutral text-surface px-8 py-3 font-mono font-bold tracking-widest uppercase hover:bg-primary transition-colors text-sm border-2 border-neutral">
         Deploy
-      </button>
+      </button> */}
     </nav>
   );
 }
