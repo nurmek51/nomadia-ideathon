@@ -24,14 +24,16 @@ class ApiService {
   static final ApiService instance = ApiService._internal();
 
   final Dio _dio;
+  static const _cloudflareBaseUrl =
+      'https://bosnia-reuters-fridge-rica.trycloudflare.com';
 
   static String _resolveBaseUrl() {
     if (kIsWeb) {
-      return 'http://127.0.0.1:8000';
+      return _cloudflareBaseUrl;
     }
     return switch (defaultTargetPlatform) {
-      TargetPlatform.android => 'http://10.0.2.2:8000',
-      _ => 'http://127.0.0.1:8000',
+      TargetPlatform.android => _cloudflareBaseUrl,
+      _ => _cloudflareBaseUrl,
     };
   }
 
