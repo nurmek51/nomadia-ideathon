@@ -17,6 +17,41 @@ INITIAL_VILLAGES = [
         "lat": 43.31,
         "lng": 77.02,
     },
+    {
+        "name": "Туркана, Кения",
+        "risk_level": "high",
+        "is_isolated": True,
+        "lat": 3.12,
+        "lng": 35.61,
+    },
+    {
+        "name": "Гулу, Уганда",
+        "risk_level": "medium",
+        "is_isolated": False,
+        "lat": 2.77,
+        "lng": 32.30,
+    },
+    {
+        "name": "Таматаве, Мадагаскар",
+        "risk_level": "high",
+        "is_isolated": True,
+        "lat": -18.15,
+        "lng": 49.40,
+    },
+    {
+        "name": "Агадес, Нигер",
+        "risk_level": "critical",
+        "is_isolated": True,
+        "lat": 16.97,
+        "lng": 7.99,
+    },
+    {
+        "name": "Санта-Роса, Перу",
+        "risk_level": "medium",
+        "is_isolated": True,
+        "lat": -3.77,
+        "lng": -73.24,
+    },
 ]
 
 
@@ -56,6 +91,67 @@ INITIAL_INVENTORY = {
             "baby_food": 25,
         },
     },
+    "LifePod — Туркана": {
+        "type": "lifepod",
+        "village": "Туркана, Кения",
+        "lat": 3.12,
+        "lng": 35.61,
+        "items": {
+            "water_kits": 18,
+            "food_packs": 34,
+            "baby_food": 3,
+            "fuel_cans": 2,
+            "antibiotics": 1,
+        },
+    },
+    "Аптека Гулу": {
+        "type": "pharmacy",
+        "village": "Гулу, Уганда",
+        "lat": 2.77,
+        "lng": 32.30,
+        "items": {
+            "insulin": 4,
+            "antibiotics": 9,
+            "paracetamol": 28,
+            "medical_kits": 11,
+        },
+    },
+    "Склад Таматаве": {
+        "type": "warehouse",
+        "village": "Таматаве, Мадагаскар",
+        "lat": -18.15,
+        "lng": 49.40,
+        "items": {
+            "water_kits": 60,
+            "food_packs": 90,
+            "baby_food": 20,
+            "fuel_cans": 12,
+        },
+    },
+    "Магазин Агадес": {
+        "type": "shop",
+        "village": "Агадес, Нигер",
+        "lat": 16.97,
+        "lng": 7.99,
+        "items": {
+            "food_packs": 46,
+            "water_kits": 21,
+            "fuel_cans": 15,
+            "solar_lanterns": 10,
+        },
+    },
+    "LifePod — Санта-Роса": {
+        "type": "lifepod",
+        "village": "Санта-Роса, Перу",
+        "lat": -3.77,
+        "lng": -73.24,
+        "items": {
+            "water_kits": 11,
+            "food_packs": 24,
+            "baby_food": 6,
+            "insulin": 1,
+        },
+    },
 }
 
 
@@ -64,7 +160,22 @@ INITIAL_AID_CREDITS = {
         "food": 30,
         "medicine": 15,
         "water": 10,
-    }
+    },
+    "resident_turkana": {
+        "food": 22,
+        "medicine": 9,
+        "water": 18,
+    },
+    "resident_agades": {
+        "food": 16,
+        "medicine": 12,
+        "water": 20,
+    },
+    "resident_tamatave": {
+        "food": 28,
+        "medicine": 10,
+        "water": 14,
+    },
 }
 
 

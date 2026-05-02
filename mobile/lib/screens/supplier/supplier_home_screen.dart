@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../api_service.dart';
+import '../../utils/labels.dart';
 import '../../widgets/emergency_card.dart';
 import '../../widgets/metric_card.dart';
 import '../../widgets/nomadia_navigation.dart';
@@ -109,9 +110,9 @@ class _SupplierHomeScreenState extends State<SupplierHomeScreen> {
                   EmergencyCard(
                     title: 'Инсулин x1',
                     subtitle: 'Запрос от диспетчера',
-                    details: const [
+                    details: [
                       'Куда: Горное село',
-                      'Доставка: Drone Medical Line',
+                      'Доставка: ${deliveryTypeLabel('drone')}',
                     ],
                     status: '${tasks.first['status']}',
                     actionLabel: 'Открыть',

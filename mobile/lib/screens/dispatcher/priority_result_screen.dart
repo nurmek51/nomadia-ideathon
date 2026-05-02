@@ -50,9 +50,9 @@ class PriorityResultScreen extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: SafeArea(
-        minimum: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-        child: ElevatedButton(
+      bottomNavigationBar: NomadiaBottomArea(
+        current: DemoRoleTab.dispatcher,
+        topChild: ElevatedButton(
           onPressed: () async {
             try {
               final matchResult = await _matchRequest(requestId);

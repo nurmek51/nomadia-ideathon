@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme.dart';
+import '../utils/labels.dart';
 
 class StatusChip extends StatelessWidget {
   const StatusChip({
@@ -29,7 +30,7 @@ class StatusChip extends StatelessWidget {
   }
 
   Color _backgroundFor(String status) {
-    return switch (status) {
+    return switch (normalizeStatusCode(status)) {
       'critical' || 'created' => AppTheme.danger.withValues(alpha: 0.16),
       'high' || 'verified' || 'matched' => AppTheme.warning.withValues(alpha: 0.16),
       'supplier_confirmed' || 'prioritized' => AppTheme.secondary.withValues(alpha: 0.18),
@@ -39,19 +40,10 @@ class StatusChip extends StatelessWidget {
   }
 
   String _humanize(String raw) {
-    const map = {
-      'created': 'создана',
-      'verified': 'подтверждена',
-      'prioritized': 'приоритет рассчитан',
-      'matched': 'ресурс найден',
-      'supplier_confirmed': 'поставщик подтвердил',
-      'in_delivery': 'доставка запущена',
-      'delivered': 'доставлено',
-      'critical': 'критический',
-      'high': 'высокий',
-      'medium': 'средний',
-      'low': 'низкий',
-    };
-    return map[raw] ?? raw;
+    final status = statusLabel(raw);
+    if (status != raw || normalizeStatusCode(raw) != raw) {
+      return status;
+    }
+    return priorityLevelLabel(raw);
   }
 }

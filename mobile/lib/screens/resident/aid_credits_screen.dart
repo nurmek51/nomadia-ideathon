@@ -15,6 +15,9 @@ class AidCreditsScreen extends StatelessWidget {
         title: 'Aid Credits',
         fallbackRoute: '/resident',
       ),
+      bottomNavigationBar: const NomadiaBottomArea(
+        current: DemoRoleTab.resident,
+      ),
       body: FutureBuilder<Map<String, dynamic>>(
         future: ApiService.instance.getAidCredits('resident_demo'),
         builder: (context, snapshot) {
@@ -66,6 +69,7 @@ class AidCreditsScreen extends StatelessWidget {
                   ),
                 ),
               ),
+              const SizedBox(height: 24),
             ],
           );
         },

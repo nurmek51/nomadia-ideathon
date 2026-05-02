@@ -68,6 +68,9 @@ class _ResidentCreateRequestScreenState extends State<ResidentCreateRequestScree
         title: 'Новая заявка',
         fallbackRoute: '/resident',
       ),
+      bottomNavigationBar: const NomadiaBottomArea(
+        current: DemoRoleTab.resident,
+      ),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
@@ -196,6 +199,11 @@ class _ResidentCreateRequestScreenState extends State<ResidentCreateRequestScree
             items: const [
               DropdownMenuItem(value: 'Горное село', child: Text('Горное село')),
               DropdownMenuItem(value: 'Аксу', child: Text('Аксу')),
+              DropdownMenuItem(value: 'Туркана, Кения', child: Text('Туркана, Кения')),
+              DropdownMenuItem(value: 'Гулу, Уганда', child: Text('Гулу, Уганда')),
+              DropdownMenuItem(value: 'Таматаве, Мадагаскар', child: Text('Таматаве, Мадагаскар')),
+              DropdownMenuItem(value: 'Агадес, Нигер', child: Text('Агадес, Нигер')),
+              DropdownMenuItem(value: 'Санта-Роса, Перу', child: Text('Санта-Роса, Перу')),
             ],
             onChanged: (value) {
               if (value != null) {
@@ -214,6 +222,7 @@ class _ResidentCreateRequestScreenState extends State<ResidentCreateRequestScree
             onPressed: _submitting ? null : _submit,
             child: Text(_submitting ? 'Отправка...' : 'Отправить заявку'),
           ),
+          const SizedBox(height: 24),
         ],
       ),
     );

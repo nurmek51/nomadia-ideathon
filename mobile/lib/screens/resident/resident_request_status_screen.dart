@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../api_service.dart';
+import '../../utils/labels.dart';
 import '../../widgets/mock_map_card.dart';
 import '../../widgets/nomadia_navigation.dart';
 import '../../widgets/status_chip.dart';
@@ -43,6 +44,9 @@ class _ResidentRequestStatusScreenState
         context,
         title: 'Статус заявки',
         fallbackRoute: '/resident',
+      ),
+      bottomNavigationBar: const NomadiaBottomArea(
+        current: DemoRoleTab.resident,
       ),
       body: FutureBuilder<Map<String, dynamic>>(
         future: _future,
@@ -117,6 +121,7 @@ class _ResidentRequestStatusScreenState
                   onPressed: () => context.go('/resident'),
                   child: const Text('Вернуться на главную'),
                 ),
+                const SizedBox(height: 24),
               ],
             ),
           );
@@ -126,6 +131,7 @@ class _ResidentRequestStatusScreenState
   }
 
   List<Widget> _timeline(String status) {
+    final normalized = normalizeStatusCode(status);
     const ordered = [
       'created',
       'prioritized',
@@ -133,11 +139,11 @@ class _ResidentRequestStatusScreenState
       'in_delivery',
       'delivered',
     ];
-    final currentIndex = ordered.indexOf(status);
+    final currentIndex = ordered.indexOf(normalized);
     return List.generate(
       ordered.length,
       (index) {
-        final done = currentIndex >= index || (status == 'verified' && index == 0);
+        final done = currentIndex >= index || (normalized == 'verified' && index == 0);
         final label = switch (ordered[index]) {
           'created' => 'Заявка создана',
           'prioritized' => 'Приоритет рассчитан',
@@ -155,18 +161,19 @@ class _ResidentRequestStatusScreenState
 }
 
 String _deliveryLabel(String? value) {
-  return switch (value) {
-    'drone' => 'Drone Medical Line',
-    'vehicle' => 'Ground Support Line',
-    'ranger_pickup' => 'выдачу через рейнджера',
-    'external_supply' => 'внешнюю поставку',
-    _ => 'операционную цепочку Nomadia',
-  };
+  return deliveryTypeLabel(value);
 }
 
 String _itemLabel(String item) {
   return switch (item) {
     'insulin' => 'Инсулин',
+    'food_packs' => 'Сухие пайки',
+    'water_kits' => 'Наборы воды',
+    'antibiotics' => 'Антибиотики',
+    'baby_food' => 'Детское питание',
+    'fuel_cans' => 'Канистры топлива',
+    'medical_kits' => 'Медицинские наборы',
+    'solar_lanterns' => 'Солнечные фонари',
     _ => item,
   };
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme.dart';
+import '../utils/labels.dart';
 
 class PriorityScoreCard extends StatelessWidget {
   const PriorityScoreCard({
@@ -50,11 +51,6 @@ class PriorityScoreCard extends StatelessWidget {
   }
 
   String _levelLabel(String raw) {
-    return switch (raw) {
-      'critical' => 'КРИТИЧЕСКИЙ ПРИОРИТЕТ',
-      'high' => 'ВЫСОКИЙ ПРИОРИТЕТ',
-      'medium' => 'СРЕДНИЙ ПРИОРИТЕТ',
-      _ => 'НИЗКИЙ ПРИОРИТЕТ',
-    };
+    return priorityHeadlineLabel(raw);
   }
 }

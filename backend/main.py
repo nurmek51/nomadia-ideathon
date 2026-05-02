@@ -124,6 +124,20 @@ def decrement_inventory_for_delivery(request_data: dict, match_data: dict) -> No
     node["items"][requested_item] -= 1
 
 
+def require_supplier_confirmation(request_data: dict, match_data: dict) -> None:
+    matched_node = match_data["matched_node"]
+    node = db.inventory.get(matched_node)
+    if node is None or not is_supplier_node(node):
+        return
+
+    supplier_task = db.get_supplier_task_by_request(request_data["id"])
+    if supplier_task is None or supplier_task["status"] != "supplier_confirmed":
+        raise HTTPException(
+            status_code=409,
+            detail="Сначала поставщик должен подтвердить наличие ресурса",
+        )
+
+
 def get_delivery_by_request_id(request_id: int) -> dict | None:
     return next((delivery for delivery in db.deliveries if delivery["request_id"] == request_id), None)
 
@@ -325,6 +339,7 @@ def approve_delivery(request_id: int) -> dict:
         db.save_match(request_id, match_data)
         create_supplier_task_if_needed(request_data, match_data)
 
+    require_supplier_confirmation(request_data, match_data)
     decrement_inventory_for_delivery(request_data, match_data)
     delivery = db.add_delivery(
         {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../api_service.dart';
+import '../../utils/labels.dart';
 import '../../widgets/emergency_card.dart';
 import '../../widgets/metric_card.dart';
 import '../../widgets/nomadia_navigation.dart';
@@ -106,7 +107,7 @@ class _RangerHomeScreenState extends State<RangerHomeScreen> {
                       'Село: Горное село',
                       'Группа: хронический пациент',
                     ],
-                    status: 'created',
+                    status: statusLabel('created'),
                     actionLabel: 'Проверить заявку',
                     onTap: () => context.push('/ranger/verify/${requests.first['id']}'),
                   )

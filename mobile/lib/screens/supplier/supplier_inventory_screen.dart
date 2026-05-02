@@ -86,6 +86,9 @@ class _SupplierInventoryScreenState extends State<SupplierInventoryScreen> {
         title: 'Запасы аптеки',
         fallbackRoute: '/supplier',
       ),
+      bottomNavigationBar: const NomadiaBottomArea(
+        current: DemoRoleTab.supplier,
+      ),
       body: FutureBuilder<Map<String, dynamic>>(
         future: _future,
         builder: (context, snapshot) {
@@ -126,6 +129,7 @@ class _SupplierInventoryScreenState extends State<SupplierInventoryScreen> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 24),
               ],
             ),
           );
@@ -140,6 +144,12 @@ String _itemLabel(String item) {
     'insulin' => 'Инсулин',
     'antibiotics' => 'Антибиотики',
     'paracetamol' => 'Парацетамол',
+    'medical_kits' => 'Медицинские наборы',
+    'fuel_cans' => 'Канистры топлива',
+    'solar_lanterns' => 'Солнечные фонари',
+    'food_packs' => 'Сухие пайки',
+    'water_kits' => 'Наборы воды',
+    'baby_food' => 'Детское питание',
     _ => item,
   };
 }

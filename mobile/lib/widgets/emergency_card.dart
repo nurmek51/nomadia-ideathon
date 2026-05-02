@@ -23,32 +23,49 @@ class EmergencyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            StatusChip(label: status),
-            const SizedBox(height: 12),
-            Text(title, style: Theme.of(context).textTheme.titleLarge),
-            const SizedBox(height: 4),
-            Text(subtitle, style: Theme.of(context).textTheme.bodyLarge),
-            const SizedBox(height: 12),
-            ...details.map(
-              (detail) => Padding(
-                padding: const EdgeInsets.only(bottom: 4),
-                child: Text(detail),
+      child: SizedBox(
+        height: 236,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              StatusChip(label: status),
+              const SizedBox(height: 12),
+              Text(
+                title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
-            ),
-            const SizedBox(height: 16),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: onTap,
-                child: Text(actionLabel),
+              const SizedBox(height: 4),
+              Text(
+                subtitle,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
-            ),
-          ],
+              const SizedBox(height: 12),
+              ...details.map(
+                (detail) => Padding(
+                  padding: const EdgeInsets.only(bottom: 4),
+                  child: Text(
+                    detail,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ),
+              const Spacer(),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: onTap,
+                  child: Text(actionLabel),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
